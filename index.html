@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Quran Academy</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #fff;
+        color: #000;
+      }
+
+      /* Navbar */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #000;
+        color: #fff;
+        padding: 1rem 2rem;
+        position: relative;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 1rem;
+      }
+
+      .nav-links a:hover {
+        color: #ddd;
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .auth-buttons button {
+        padding: 0.5rem 1rem;
+        border: none;
+        background-color: white;
+        color: black;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .auth-buttons button:hover {
+        background-color: #ddd;
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+      }
+
+      .hamburger div {
+        width: 25px;
+        height: 3px;
+        background-color: white;
+        margin: 4px;
+        transition: 0.3s;
+      }
+
+      .mobile-menu {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        padding: 1rem;
+        gap: 1rem;
+      }
+
+      .mobile-menu a,
+      .mobile-menu button {
+        color: white;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      /* Banner Slider */
+      .banner {
+        position: relative;
+        height: 90vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 5%;
+        background-color: #000;
+      }
+
+      .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        z-index: 1;
+      }
+
+      .slide.active {
+        opacity: 1;
+        z-index: 2;
+      }
+
+      .banner-content {
+        position: relative;
+        z-index: 3;
+        color: white;
+        max-width: 600px;
+      }
+
+      .typing-text {
+        font-size: 2rem;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 0;
+        animation: typing 4s steps(40, end) forwards;
+        position: relative;
+      }
+
+      .typing-text::after {
+        content: "|";
+        position: absolute;
+        right: 0;
+        color: white;
+        animation: blink 0.75s step-end infinite;
+      }
+
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      .enroll-btn {
+        margin-top: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #000;
+        color: white;
+        border: 2px solid white;
+        font-weight: bold;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .enroll-btn:hover {
+        background-color: white;
+        color: black;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-links,
+        .auth-buttons {
+          display: none;
+        }
+
+        .hamburger {
+          display: flex;
+        }
+
+        .mobile-menu.active {
+          display: flex;
+        }
+
+        .banner {
+          justify-content: center;
+          padding-left: 0;
+          text-align: center;
+        }
+
+        .typing-text {
+          font-size: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .typing-text {
+          font-size: 1.2rem;
+        }
+
+        .enroll-btn {
+          padding: 0.6rem 1.2rem;
+          font-size: 0.9rem;
+        }
+        .auth-buttons {
+          padding: 0.6rem 1.2rem;
+          font-size: 0.9rem;
+        }
+      }
+      .box-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+        justify-content: center;
+        background-color: #000000;
+      }
+
+      .box {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        width: 30%;
+        min-width: 280px;
+      }
+
+      .box:hover {
+        transform: translateY(-5px);
+      }
+
+      .box img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .box-content {
+        padding: 15px;
+        text-align: center;
+      }
+
+      .box-content h3 {
+        margin: 10px 0;
+        font-size: 1.2rem;
+        color: #333;
+      }
+
+      .box-content a {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 8px 16px;
+        background-color: black;
+        color: white;
+        text-decoration: none;
+        border-radius: 20px;
+        transition: background 0.3s;
+      }
+
+      .box-content a:hover {
+        background-color: #555;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .box {
+          width: 90%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .box {
+          width: 100%;
+        }
+      }
+      .box1{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin: 0%;
+        padding: 0%;
+        background-color: black;
+        height: 90px;
+        width: 100%
+      }
+      .heading{
+        color: rgb(255, 255, 255);
+         font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+      }
+      p{
+        color: rgb(0, 0, 0);
+         font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+      }
+      h1{
+        color: rgb(0, 0, 0);
+         font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+      }
+      a{
+        font-size: 1.2rem;
+      }
+      
+    .purple-boxes-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 40px 20px;
+      background-color: #000;
+    }
+
+    .purple-box {
+      background-color: rgb(35, 10, 63);
+      border: 3px solid yellow;
+      color: white;
+      padding: 45px;
+      border-radius: 40px;
+      width: 80%;
+      height: 40%;
+      min-width: 280px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .purple-box:hover {
+      transform: translateY(-5px);
+    }
+
+    @media (max-width: 768px) {
+      .purple-box {
+        width: 45%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .purple-box {
+        width: 100%;
+      }
+    }
+    .p1{
+      color: white;
+      font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+    }
+    
+    .pricing-container {
+      background-color: #000;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      margin: 0%;
+      margin-top: 0%;
+    }
+
+    .pricing-box {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 60px 60px;
+      flex: 1 1 300px;
+      max-width: 400px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .pricing-box:hover {
+      transform: translateY(-5px);
+    }
+
+    .pricing-box h2 {
+      font-size: 22px;
+      color: #444;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 28px;
+      color: #007BFF;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .per-month {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 30px;
+      padding: 0 10px;
+    }
+
+    .features li {
+      margin: 10px 0;
+      color: #333;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .features li::before {
+      content: "✔";
+      color: green;
+      position: absolute;
+      left: 0;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      background-color: #000000;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #121513;
+    }
+
+    @media (max-width: 768px) {
+      .pricing-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    .pakistan{
+      background-color: #000;
+      color: white;
+      font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+    }
+    .box2{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin: 0%;
+        padding: 0%;
+        background-color: black;
+        height: 90px;
+        width: 100%
+      }
+       .container3 {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      background-color: #000000;
+      width: 100%;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    .heading3 {
+      width: 100%;
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 30px;
+      position: relative;
+      font-weight: bold;
+      color: #f6f6f6;
+    }
+
+    .heading3::before,
+    .heading3::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 80px;
+      height: 2px;
+      background-color: #333;
+    }
+
+    .heading3::before {
+      left: 0;
+    }
+
+    .heading3::after {
+      right: 0;
+    }
+
+    .image-box, .text-box {
+      flex: 1 1 300px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .image-box img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .text-box ul {
+      list-style-type: none;
+      padding-left: 20px;
+      line-height: 2.4;
+    }
+
+    .text-box li {
+      font-size: 30px;
+      color: #ffffff;
+      font-weight: bolder;
+      font-family: 'Times New Roman', Times, serif;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .heading::before,
+      .heading::after {
+        width: 50px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px 10px;
+      }
+      .heading {
+        font-size: 22px;
+      }
+      .text-box li {
+        font-size: 16px;
+        text-align: center;
+      }
+    }
+    .footer {
+  background-color: #fffdfd;
+  color: #000000;
+  padding: 40px 0;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-column {
+  flex: 1 1 200px;
+  margin: 20px;
+}
+
+.footer-column h3 {
+  margin-bottom: 15px;
+  color: #000000;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.footer-column ul li a:hover {
+  text-decoration: underline;
+}
+
+.social-icons a {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.social-icons img {
+  width: 24px;
+  height: 24px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  margin-top: 20px;
+  font-size: 14px;
+}
+.flip-button {
+  width: 150px;
+  height: 50px;
+  perspective: 1000px;
+  margin: 50px auto;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-button:hover .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  line-height: 50px;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 8px;
+  backface-visibility: hidden;
+}
+
+.flip-front {
+  background-color: #000000;
+}
+
+.flip-back {
+  background-color: #fcfffc;
+  color: #000;
+  transform: rotateY(180deg);
+}
+.whatsapp-float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25d366;
+  color: #fff;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+}
+
+.whatsapp-float img {
+  width: 30px;
+  height: 30px;
+}
+
+  </style>
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo"><img src="logo.png" width="120px"></div>
+
+      <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Contact</a>
+        <a href="#">Services</a>
+        <a href="#">Courses</a>
+      </nav>
+
+      <div class="auth-buttons">
+        <button>Login</button>
+        <button>Sign Up</button>
+      </div>
+
+      <div class="hamburger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#">Home</a>
+      <a href="#">Contact</a>
+      <a href="#">Services</a>
+      <a href="#">Courses</a>
+      <button>Login</button>
+      <button>Sign Up</button>
+    </div>
+
+    <!-- Banner Slider with Typing Text -->
+    <section class="banner">
+      <div class="slide active" style="background-image: url('ds.jpg')"></div>
+      <div class="slide" style="background-image: url('gd.jpg')"></div>
+      <div class="slide" style="background-image: url('sw.jpg')"></div>
+
+      <div class="banner-content">
+        <div class="typing-text" id="typeText">Learn Quran Online <span>with us</span></div>
+        <div class="flip-button">
+  <div class="flip-inner">
+    <div class="flip-front">REGISTER NOW</div>
+    <div class="flip-back">Let's Go!</div>
+  </div>
+</div>
+      </div>
+    </section>
+    <hr />
+     <div class="box1">
+            <h1 class="heading">OUR FEATURED COURSES</h1>
+     </div>
+
+    <div class="box-container">
+    
+      <div class="box">
+        <img src="3.jpg" alt="Product 1" />
+        <div class="box-content">
+          <h1>Basic Qaida for beginners</h1>
+          <p>
+Arabic Qaida course is a basic course that is taught by our Quran Tutor using Arabic Qaida curriculum
+          </p>
+          <a href="#">COURSE DETAILS</a>
+        </div>
+      </div>
+      <div class="box">
+        <img src="6.jpg" alt="Product 2" />
+        <div class="box-content">
+          <h1>Quran Reciation</h1>
+          <p>
+            Using qualified Quran tutors, you can learn to recite the Qur’an properly more quickly and easily than ever before..
+          </p>
+          <a href="#">COURSE DETAILS</a>
+        </div>
+      </div>
+      <div class="box">
+        <img src="ds.jpg" alt="Product 3" />
+        <div class="box-content">
+          <h1>Quran memorization</h1>
+          <p>
+            <div>Through live memorization classes, you can learn</div>how to memorise the Holy Qur’an and become a Hafiz/Hafiza...
+          <a href="#">COURSE DETAILS</a>
+        </div>
+      </div>
+    </div>
+ <div class="box-container">
+    
+      <div class="box">
+        <img src="https://ejazulquran.com/wp-content/uploads/2023/01/basic-qaida-600x600.jpeg" alt="Product 1" />
+        <div class="box-content">
+          <h1>Basic Qaida for beginners</h1>
+          <p>
+         Arabic Qaida course is a basic course that is taught by our Quran Tutor using Arabic Qaida curriculum.
+          </p>
+          <a href="#">COURSE DETAILS</a>
+        </div>
+      </div>
+      <div class="box">
+        <img src="https://ejazulquran.com/wp-content/uploads/2022/12/Post-4-600x600.jpg" alt="Product 2" />
+        <div class="box-content">
+          <h1>Quran ijazah</h1>
+          <p>
+           Get Ijazah online from qualified Quran scholars in “Quran Recitation” and/or “Quran Memorization.”
+          </p>
+          <a href="#">COURSE DETAILS</a>
+        </div>
+      </div>
+      <div class="box">
+        <img src="https://ejazulquran.com/wp-content/uploads/2022/12/Post-5-600x600.jpg" alt="Product 3" />
+        <div class="box-content">
+          <h1>Tafsir</h1>
+          <p>
+            The top Islam and Quran scholars can help you learn<div>Quran Tafseer online and better understand the Quran.</div>
+          <a href="#">COURSE DETAILS</a>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="purple-boxes-container">
+    <div class="purple-box">
+      <img src="free-400x400.png" width="45px">
+      <h2>Free Trial
+Class</h2>
+      <p class="p1">Get free trial class for any course</p>
+    </div>
+    <div class="purple-box">
+       <img src="24-hours-400x400.png" width="45px">
+      <h2>Classes Around The Clock</h2>
+      <p class="p1">Take classes at any time that suit you</p>
+    </div>
+    <div class="purple-box">
+       <img src="certificate-400x400.png" width="45px">
+      <h2>Completion Certificates</h2>
+      <p class="p1">Get a certificate after completing the course</p>
+    </div>
+  </div>
+  <hr>
+  <div class="box2">
+            <h1 class="heading">FOR PAKISTANI STUDENTS</h1>
+     </div>
+   <div class="pricing-container">
+
+    <!-- Box 1 -->
+    <div class="pricing-box">
+      <h2>5 Days / Week</h2>
+      <div class="price">Rs: 11,000</div>
+      <div class="per-month">Per Month</div>
+      <ul class="features">
+        <li>20 Classes</li>
+        <li>30 minutes per class</li>
+        <li>Concession Available</li>
+        <li>Premium 1-on-1 class</li>
+      </ul>
+      <button class="btn">Start Free Trial</button>
+    </div>
+
+    <!-- Box 2 -->
+    <div class="pricing-box">
+      <h2>4 Days / Week</h2>
+      <div class="price">Rs: 10,000</div>
+      <div class="per-month">Per Month</div>
+      <ul class="features">
+        <li>17 Classes</li>
+        <li>30 minutes per class</li>
+        <li>Concession Available</li>
+        <li>Premium 1-on-1 class</li>
+      </ul>
+      <button class="btn">Start Free Trial</button>
+    </div>
+  </div>
+  <hr>
+  
+  <div class="container3">
+    <h2 class="heading3">What You'll Learn</h2>
+
+    <div class="image-box">
+      <img src="6.jpg" alt="Quran Learning Image" />
+    </div>
+
+    <div class="text-box">
+      <ul>
+        <li>📖Learn Quran</li>
+        <li>📖Learn Quran for Kids</li>
+        <li>📖Learn Qirat Online</li>
+        <li>📖Learn Noorani Qaida</li>
+        <li>📖Learn Quranic Arabic</li>
+        <li>📖Learn Reading Quran</li>
+        <li>📖Learn Quran Memorization (Hifz)</li>
+        <li>📖Learn Tajweed Rules</li>
+        <li>📖Learn Arabic Language Tajweed Rules</li>
+      </ul>
+    </div>
+  </div>
+  <a href="https://wa.me/92460206227" class="whatsapp-float" target="_blank" title="Chat with us on WhatsApp">
+  <img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png" alt="WhatsApp" />
+</a>
+  <hr>
+  <footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>About Us</h3>
+      <p>We offer online Quran learning for all ages with certified tutors. Using qualified Quran tutors, you can learn to recite the Qur’an properly more quickly and easily than ever before..</p>
+    </div>
+    <div class="footer-column">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Testimonials</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Contact</h3>
+      <p>Email: qarisufyan@gmail.com</p>
+      <p>Phone: +92 300 7483179</p>
+      <p>Address: Lahore, Pakistan</p>
+    </div>
+    <div class="footer-column">
+      <h3>Follow Us</h3>
+      <div class="social-icons">
+        <a href="#"><img src="pngwing.com (2).png" alt="Facebook" /></a>
+        <a href="#"><img src="pngwing.com (4).png" alt="Twitter" /></a>
+        <a href="#"><img src="pngwing.com (8).png" alt="Instagram" /></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 al-sufyan institute. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+    <script>
+      function toggleMenu() {
+        const menu = document.getElementById("mobileMenu");
+        menu.classList.toggle("active");
+      }
+
+      // Slider
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".slide");
+
+      setInterval(() => {
+        slides[currentSlide].classList.remove("active");
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add("active");
+
+        // Reset typing animation
+        const text = document.getElementById("typeText");
+        text.style.animation = "none";
+        void text.offsetWidth;
+        text.style.animation = "typing 4s steps(40, end) forwards";
+      }, 5000);
+    </script>
+  </body>
+</html>
